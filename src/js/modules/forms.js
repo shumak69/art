@@ -1,9 +1,10 @@
+import { postData } from "../services/requests";
+
 function forms(state) {
     const form = document.querySelectorAll('form');
     const inputs = document.querySelectorAll('input');
     // const phoneInputs = document.querySelectorAll('input[name="user_phone"]');
     const upload = document.querySelectorAll('[name="upload"]');
-
     // phoneInputs.forEach(item => {
     //     item.addEventListener('input', () => {
     //         item.value = item.value.replace(/[^(\+)|\d]/ig, '');
@@ -24,13 +25,6 @@ function forms(state) {
         question: 'assets/question.php'
     };
 
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: 'POST',
-            body: data
-        });
-        return await res.text();
-    };
     function clearInput () {
         inputs.forEach(item => {
             item.value = '';
@@ -71,6 +65,12 @@ function forms(state) {
             statusMessage.appendChild(textMessage);
             const formData = new FormData(item);
             let api;
+            if(item.classList.contains('calc_form')) {
+                for(let key in state) {
+                    formData.append(key, state[key]);
+                }
+                console.log(state);
+            }
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
             console.log(api);
 
@@ -90,7 +90,6 @@ function forms(state) {
                     item.classList.remove('animate__fadeOutUp');
                     item.classList.add('animate__fadeInUp');
                 }, 5000);
-                state = {};
             });
             
         });

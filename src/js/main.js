@@ -3,6 +3,8 @@ import slider from './modules/slider';
 import forms from './modules/forms';
 import mask from './modules/mask';
 import checkTextInputs from './modules/checkTextInputs';
+import showMoreStyles from './modules/showMoreStyles';
+import calc from './modules/calc';
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
@@ -25,14 +27,16 @@ window.addEventListener('DOMContentLoaded', () => {
             document.body.style.marginRight = `${scrollWidth}px`;
         }
     }, 60000);
-    
+    const state = {};
     openModal('.popup-design','.button-design', 'popup-design');
     openModal('.popup-consultation','.button-consultation', 'popup-consultation');
     openModal('.popup-gift', '.fixed-gift', 'popup-gift', true);
     slider('.main-slider-item', 'vertical');
     slider('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
-    forms();
+    calc('#size', '#material', '#options', '.promocode', '.calc-price', state);
+    forms(state);
     mask("[name='phone']");
     checkTextInputs('[name="name"]');
     checkTextInputs('[name="message"]');
+    showMoreStyles('.button-styles', '#styles .row');
 });
