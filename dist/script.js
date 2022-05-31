@@ -4510,6 +4510,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
 /* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
+
 
 
 
@@ -4545,12 +4547,13 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup-gift', '.fixed-gift', 'popup-gift', true);
   Object(_modules_slider__WEBPACK_IMPORTED_MODULE_2__["default"])('.main-slider-item', 'vertical');
   Object(_modules_slider__WEBPACK_IMPORTED_MODULE_2__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
+  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_7__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', state);
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(state);
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_4__["default"])("[name='phone']");
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_5__["default"])('[name="name"]');
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_5__["default"])('[name="message"]');
   Object(_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_6__["default"])('.button-styles', '#styles .row');
-  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_7__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
+  Object(_modules_filter__WEBPACK_IMPORTED_MODULE_8__["default"])();
 });
 
 /***/ }),
@@ -4566,6 +4569,11 @@ window.addEventListener('DOMContentLoaded', function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_trim__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.trim */ "./node_modules/core-js/modules/es.string.trim.js");
 /* harmony import */ var core_js_modules_es_string_trim__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+
 
 
 function calc(size, material, option, promocode, result, state) {
@@ -4574,6 +4582,25 @@ function calc(size, material, option, promocode, result, state) {
   var optionBlock = document.querySelector(option);
   var promocodeBlock = document.querySelector(promocode);
   var resultBlock = document.querySelector(result);
+  Object(_services_requests__WEBPACK_IMPORTED_MODULE_2__["getResourse"])('../../assets/db.json').then(function (data) {
+    function foo(block, i) {
+      var _loop = function _loop(key) {
+        block.forEach(function (item) {
+          if (key === item.textContent) {
+            item.value = data.calc[i][key];
+          }
+        });
+      };
+
+      for (var key in data.calc[i]) {
+        _loop(key);
+      }
+    }
+
+    foo(sizeBlock, 0);
+    foo(materialBlock, 1);
+    foo(optionBlock, 2);
+  });
   var sum = 0;
 
   function calcFunction() {
@@ -4587,12 +4614,13 @@ function calc(size, material, option, promocode, result, state) {
       resultBlock.textContent = sum;
     }
 
-    state = {
-      size: sizeBlock.value,
-      material: materialBlock.value,
-      option: optionBlock.value,
-      sum: resultBlock.textContent || sum
-    };
+    state.size = sizeBlock.value;
+    state.material = materialBlock.value;
+    state.option = optionBlock.value;
+    state.amount = resultBlock.textContent;
+    console.log(sizeBlock.forEach(function (item) {
+      return console.log(item.value);
+    }));
   }
 
   sizeBlock.addEventListener('change', calcFunction);
@@ -4638,6 +4666,93 @@ function checkTextInputs(selector) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (checkTextInputs);
+
+/***/ }),
+
+/***/ "./src/js/modules/filter.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/filter.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function filter() {
+  var menu = document.querySelector(".portfolio-menu"),
+      items = menu.querySelectorAll('li'),
+      btnAll = menu.querySelector('.all'),
+      btnLovers = menu.querySelector('.lovers'),
+      btnChef = menu.querySelector('.chef'),
+      btnLGirl = menu.querySelector('.girl'),
+      btnGuy = menu.querySelector('.guy'),
+      btnGrandmother = menu.querySelector('.grandmother'),
+      btnGranddad = menu.querySelector('.granddad'),
+      wrapper = document.querySelector('.portfolio-wrapper'),
+      markAll = wrapper.querySelectorAll('.all'),
+      markLovers = wrapper.querySelectorAll('.lovers'),
+      markChef = wrapper.querySelectorAll('.chef'),
+      markGirl = wrapper.querySelectorAll('.girl'),
+      markGuy = wrapper.querySelectorAll('.guy'),
+      markGrandmother = wrapper.querySelectorAll('.grandmother'),
+      markGranddad = wrapper.querySelectorAll('.granddad'),
+      no = document.querySelector('.portfolio-no');
+
+  function typeFilter(markType) {
+    markAll.forEach(function (item) {
+      item.style.display = 'none';
+      item.classList.remove('animate__animated', 'animate__fadeIn');
+    });
+    no.style.display = 'none';
+    no.classList.remove('animate__animated', 'animate__fadeIn');
+
+    if (markType) {
+      markType.forEach(function (item) {
+        item.style.display = 'block';
+        item.classList.add('animate__animated', 'animate__fadeIn');
+      });
+    } else {
+      no.style.display = 'block';
+      no.classList.add('animate__animated', 'animate__fadeIn');
+    }
+  }
+
+  btnAll.addEventListener('click', function () {
+    typeFilter(markAll);
+  });
+  btnLovers.addEventListener('click', function () {
+    typeFilter(markLovers);
+  });
+  btnLGirl.addEventListener('click', function () {
+    typeFilter(markGirl);
+  });
+  btnChef.addEventListener('click', function () {
+    typeFilter(markChef);
+  });
+  btnGuy.addEventListener('click', function () {
+    typeFilter(markGuy);
+  });
+  btnGrandmother.addEventListener('click', function () {
+    typeFilter();
+  });
+  btnGranddad.addEventListener('click', function () {
+    typeFilter();
+  });
+  menu.addEventListener('click', function (e) {
+    if (e.target && e.target.tagName === "LI") {
+      items.forEach(function (item) {
+        return item.classList.remove('active');
+      });
+      e.target.classList.add('active');
+    }
+  });
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (filter);
 
 /***/ }),
 
@@ -4739,6 +4854,8 @@ function forms(state) {
         for (var key in state) {
           formData.append(key, state[key]);
         }
+
+        console.log(state);
       }
 
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;

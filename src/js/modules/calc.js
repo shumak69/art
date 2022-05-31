@@ -13,7 +13,6 @@ function calc(size, material, option, promocode, result, state) {
                 block.forEach(item => {
                     if(key === item.textContent) {
                         item.value = data.calc[i][key];
-                        console.log(item);
                     }
                 });
             }
