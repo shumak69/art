@@ -7,6 +7,7 @@ import showMoreStyles from './modules/showMoreStyles';
 import calc from './modules/calc';
 import filter from './modules/filter';
 import picture from './modules/pictureSize';
+import accordion from './modules/accordion';
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
@@ -43,4 +44,5 @@ window.addEventListener('DOMContentLoaded', () => {
     showMoreStyles('.button-styles', '#styles .row');
     filter();
     picture();
+    accordion('.accordion-heading');
 });
