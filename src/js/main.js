@@ -6,6 +6,8 @@ import checkTextInputs from './modules/checkTextInputs';
 import showMoreStyles from './modules/showMoreStyles';
 import calc from './modules/calc';
 import filter from './modules/filter';
+import picture from './modules/pictureSize';
+
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         let display = false;
@@ -40,4 +42,5 @@ window.addEventListener('DOMContentLoaded', () => {
     checkTextInputs('[name="message"]');
     showMoreStyles('.button-styles', '#styles .row');
     filter();
+    picture();
 });
