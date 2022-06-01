@@ -8,6 +8,8 @@ import calc from './modules/calc';
 import filter from './modules/filter';
 import picture from './modules/pictureSize';
 import accordion from './modules/accordion';
+import burger from './modules/burger';
+import scrolling from './modules/scrolling';
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
@@ -45,4 +47,6 @@ window.addEventListener('DOMContentLoaded', () => {
     filter();
     picture();
     accordion('.accordion-heading');
+    burger('.burger-menu', '.burger');
+    scrolling('.pageup');
 });
