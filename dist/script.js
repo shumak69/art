@@ -4515,6 +4515,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
 /* harmony import */ var _modules_burger__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/burger */ "./src/js/modules/burger.js");
 /* harmony import */ var _modules_scrolling__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/scrolling */ "./src/js/modules/scrolling.js");
+/* harmony import */ var _modules_drop__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/drop */ "./src/js/modules/drop.js");
+
 
 
 
@@ -4566,6 +4568,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_10__["default"])('.accordion-heading');
   Object(_modules_burger__WEBPACK_IMPORTED_MODULE_11__["default"])('.burger-menu', '.burger');
   Object(_modules_scrolling__WEBPACK_IMPORTED_MODULE_12__["default"])('.pageup');
+  Object(_modules_drop__WEBPACK_IMPORTED_MODULE_13__["default"])();
 });
 
 /***/ }),
@@ -4776,6 +4779,100 @@ function checkTextInputs(selector) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (checkTextInputs);
+
+/***/ }),
+
+/***/ "./src/js/modules/drop.js":
+/*!********************************!*\
+  !*** ./src/js/modules/drop.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+
+
+
+
+
+function drop() {
+  var fileInputs = document.querySelectorAll('[name="upload"]');
+  ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(function (eventName) {
+    fileInputs.forEach(function (input) {
+      input.addEventListener(eventName, preventDefaults, false);
+    });
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function highlight(item) {
+    // item.closest('.file_upload').style.border = "5px solid yellow";
+    item.closest('.file_upload').style.backgroundColor = "rgba(53,2,0,.3)";
+  }
+
+  function unhighlight(item) {
+    if (item.closest('.calc_form')) {
+      item.closest('.file_upload').style.backgroundColor = "#fff";
+    } else if (item.closest('main')) {
+      item.closest('.file_upload').style.backgroundColor = '#f7e7e6';
+    } else {
+      item.closest('.file_upload').style.backgroundColor = "#ededed";
+    }
+
+    item.closest('.file_upload').style.border = "none";
+  }
+
+  ['dragover', 'dragenter'].forEach(function (eventName) {
+    fileInputs.forEach(function (input) {
+      input.addEventListener(eventName, function () {
+        return highlight(input);
+      }, false);
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (eventName) {
+    fileInputs.forEach(function (input) {
+      input.addEventListener(eventName, function () {
+        return unhighlight(input);
+      }, false);
+    });
+  });
+  fileInputs.forEach(function (input) {
+    input.addEventListener('drop', function (e) {
+      input.files = e.dataTransfer.files;
+      var dots;
+      var a = input.files[0].name.split('.');
+      a[0].length > 6 ? dots = '...' : dots = '.';
+      var name = a[0].slice(0, 6) + dots + a[1];
+      input.previousElementSibling.textContent = name;
+
+      if (input.closest('.main')) {
+        var formData = new FormData();
+        formData.append('file', input.files[0]);
+        Object(_services_requests__WEBPACK_IMPORTED_MODULE_4__["postData"])('assets/server.php', formData).then(function (data) {
+          return console.log(data);
+        }).catch(function () {
+          console.log('Error');
+        });
+      }
+    });
+  });
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (drop);
 
 /***/ }),
 
@@ -5214,7 +5311,7 @@ function scrolling(upSelector) {
   }); //Scrolling with requestAnimationFrame
 
   var links = document.querySelectorAll('[href^="#"]'),
-      speed = 0.3;
+      speed = 0.2;
   links.forEach(function (link) {
     link.addEventListener('click', function (event) {
       event.preventDefault();
@@ -5502,21 +5599,22 @@ var postData = function postData(url, data) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          console.log(1);
+          _context.next = 3;
           return regeneratorRuntime.awrap(fetch(url, {
             method: 'POST',
             body: data
           }));
 
-        case 2:
+        case 3:
           res = _context.sent;
-          _context.next = 5;
+          _context.next = 6;
           return regeneratorRuntime.awrap(res.text());
 
-        case 5:
+        case 6:
           return _context.abrupt("return", _context.sent);
 
-        case 6:
+        case 7:
         case "end":
           return _context.stop();
       }
